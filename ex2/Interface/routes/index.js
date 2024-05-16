@@ -4,7 +4,7 @@ var axios =require("axios");
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  axios.get("http://localhost:16000/contratos")
+  axios.get("http://container-api:16000/contratos")
     .then(resposta=>{
       res.render('index', { title: 'Gestao de contratos Home Page' ,lista:resposta.data});
     })
@@ -15,7 +15,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/entidades/:nipc', function(req, res, next) {
 
-  axios.get("http://localhost:16000/contratos?nipc=" + req.params.nipc)
+  axios.get("http://container-api:16000/contratos?nipc=" + req.params.nipc)
     .then(resposta=>{
       
       
@@ -33,7 +33,7 @@ router.get('/entidades/:nipc', function(req, res, next) {
 
 router.get('/:id', function(req, res, next) {
 
-  axios.get("http://localhost:16000/contratos/" + req.params.id)
+  axios.get("http://container-api:16000/contratos/" + req.params.id)
     .then(resposta=>{
       res.render('item', { title: 'Contrato ' + req.params.id ,item:resposta.data});
     })

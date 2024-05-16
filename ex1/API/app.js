@@ -4,7 +4,7 @@ var path = require('path');
 var logger = require('morgan');
 var mongoose = require('mongoose')
 
-var mongoDB = 'mongodb://127.0.0.1:27017/contratos'
+var mongoDB = 'mongodb://mongoDB:27017/contratos'
 mongoose.connect(mongoDB)
 var db = mongoose.connection
 db.on('error', console.error.bind(console, 'Erro de conexão ao MongoDB'))

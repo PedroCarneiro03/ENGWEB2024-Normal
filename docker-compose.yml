@@ -1,33 +1,34 @@
 version: '3'
-
 services:
-  mongodb:
-    image: mongo:latest
-    container_name: mongodb
-    restart: always
+  galunos_interface:
+    container_name: container-interface
+    image: interface
+    ports: 
+      - "16001:16001"
+    depends_on:
+      - api
+    links:
+      - api
+    
+  api:
+    container_name: container-api
+    image: api-dados
     ports:
-      - "27017:27017"
+      - "16000:16000"
+    depends_on:
+      - mongo
+    links:
+      - mongo
+      
+  mongo:
+    container_name: mongoDB
+    image: mongo
+    depends_on:
+      - mongo-seed
+
+  mongo-seed:
+    image: mongo
     volumes:
-      - mongodb_data:/data/db
-
-  api-dados:
-    build:
-      context: ./caminho/para/api-dados
-      dockerfile: Dockerfile-api-dados
-    container_name: api-dados
-    restart: always
-    environment:
-      MONGO_URI: mongodb://mongodb:27017/minha-base-de-dados
-    ports:
-      - "3000:3000"
-
-  interface:
-    build:
-      context: ./caminho/para/interface
-      dockerfile: Dockerfile-api-interfaces
-    container_name: interface
-    restart: always
-    ports:
-      - "80:80"
-    environment:
-      REACT_APP_API_URL: http://api-dados:3000
+      - ./contratos.json:/contratos.json
+    command: mongoimport --host mongodb -d contratos -c contratos contratos.json --jsonArray
+    

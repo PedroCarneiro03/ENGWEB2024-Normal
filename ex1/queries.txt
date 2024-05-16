@@ -1,7 +1,7 @@
-* Respostas para a 1.2
+Respostas para a 1.2
 
     1. db.contratos.countDocuments()
     2. db.contratos.find({tipoprocedimento:"Ajuste Direto Regime Geral"}).count()
     3. db.contratos.distinct("entidade_comunicante")
     4. db.contratos.aggregate([ { $group: { _id: "$tipoprocedimento", total: { $sum: 1 } } }, { $sort: { _id: 1 } } ])
-    5. 
+    5. db.contratos.aggregate([ { $match: { precoContratual: { $type: "string" } } }, { $group: { _id: "$NIPC_entidade_comunicante", entidade_comunicante: { $first: "$entidade_comunicante" }, totalContratos: { $sum: { $toDouble: { $cond: [ { $eq: [{ $type: "$precoContratual" }, "string"] }, { $toDouble: { $replaceOne: { input: "$precoContratual", find: ",", replacement: "." } } }, 0 ] } } } } }, { $project: { _id: 0, entidade_comunicante: 1, totalContratos: 1 } } ])
